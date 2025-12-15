@@ -1,10 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import serviceRoutes from './routes/serviceRoutes.js';
-import timeSlotRoutes from './routes/timeSlotRoutes.js';
-import appointmentRoutes from './routes/appointmentRoutes.js';
-import errorHandler from './middleware/errorHandler.js';
+import serviceRoutes from './routes/service.routes.js';
+import { errorMiddleware } from './middleware/error.middleware.js';
 
 // Initialize express app
 const app = express();
@@ -28,8 +26,6 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/services', serviceRoutes);
-app.use('/api/timeslots', timeSlotRoutes);
-app.use('/api/appointments', appointmentRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -42,6 +38,6 @@ app.use('*', (req, res) => {
 // app.use(globalErrorHandler);
 
 // Error handling middleware (must be last)
-app.use(errorHandler);
+app.use(errorMiddleware);
 
 export default app;
