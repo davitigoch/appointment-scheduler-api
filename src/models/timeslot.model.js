@@ -1,35 +1,39 @@
 import mongoose from 'mongoose';
 
-const timeSlotSchema = new mongoose.Schema({
-  serviceId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Service',
-    required: true
+const timeSlotSchema = new mongoose.Schema(
+  {
+    serviceId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Service',
+      required: true
+    },
+    date: {
+      type: String,
+      required: true,
+      match: /^\d{4}-\d{2}-\d{2}$/
+    },
+    startTime: {
+      type: String,
+      required: true,
+      match: /^\d{2}:\d{2}$/
+    },
+    endTime: {
+      type: String,
+      required: true,
+      match: /^\d{2}:\d{2}$/
+    },
+    isBooked: {
+      type: Boolean,
+      default: false
+    }
   },
-  date: {
-    type: String,
-    required: true,
-    match: /^\d{4}-\d{2}-\d{2}$/
-  },
-  startTime: {
-    type: String,
-    required: true,
-    match: /^\d{2}:\d{2}$/
-  },
-  endTime: {
-    type: String,
-    required: true,
-    match: /^\d{2}:\d{2}$/
-  },
-  isBooked: {
-    type: Boolean,
-    default: false
-  }
-}, {
-  timestamps: true
-});
+  { timestamps: true }
+);
 
 // Compound unique index
-timeSlotSchema.index({ serviceId: 1, date: 1, startTime: 1 }, { unique: true });
+timeSlotSchema.index(
+  { serviceId: 1, date: 1, startTime: 1 },
+  { unique: true }
+);
 
 export default mongoose.model('TimeSlot', timeSlotSchema);
