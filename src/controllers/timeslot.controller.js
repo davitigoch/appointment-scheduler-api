@@ -1,12 +1,12 @@
 import TimeSlot from '../models/timeslot.model.js';
 import ApiError from '../utils/ApiError.js';
-import { catchAsync } from '../utils/catchAsync.js';
+import catchAsync from '../utils/catchAsync.js';
 
 
 
 /**
  * Create a new time slot
- * Handles duplicate time slots using MongoDB unique index (409 Conflict)
+ * Handles duplicate time slots using MongoDB unique index 
  */
 const createTimeSlot = catchAsync(async (req, res) => {
   try {
@@ -17,7 +17,7 @@ const createTimeSlot = catchAsync(async (req, res) => {
       data: timeSlot
     });
   } catch (error) {
-    // Duplicate key error (compound unique index)
+    // Duplicate key error 
     if (error.code === 11000) {
       throw new ApiError(
         409,
