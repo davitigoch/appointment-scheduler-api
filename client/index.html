@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointment Scheduler Client</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <div class="page">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Live API Console</p>
+        <h1>Appointment Scheduler</h1>
+        <p class="lede">Manage services, publish slots, and book appointments against your running API.</p>
+      </div>
+      <div class="pill">ESM • Express • MongoDB</div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">API Target</p>
+          <h2>Connection</h2>
+        </div>
+        <div class="actions">
+          <button id="refreshAll" class="ghost">Refresh Data</button>
+        </div>
+      </div>
+      <div class="field-row">
+        <label for="apiBase">Base URL</label>
+        <div class="input-group">
+          <input id="apiBase" type="text" value="http://localhost:3000/api" />
+          <button id="saveApiBase">Save</button>
+        </div>
+      </div>
+      <p class="helper">Update this to point to your running backend (e.g., http://localhost:3000/api or a deployed URL).</p>
+      <div id="status" class="status">Idle</div>
+    </section>
+
+    <main class="grid">
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Services</p>
+            <h2>Create & List</h2>
+          </div>
+          <button id="reloadServices" class="ghost">Reload</button>
+        </div>
+        <form id="serviceForm" class="form">
+          <div class="field-row"><label>Name</label><input name="name" required /></div>
+          <div class="field-row"><label>Description</label><textarea name="description" rows="2"></textarea></div>
+          <div class="field-row"><label>Duration (minutes)</label><input name="durationMinutes" type="number" min="5" required /></div>
+          <div class="field-row"><label>Price</label><input name="price" type="number" min="0" step="0.01" required /></div>
+          <button type="submit">Create Service</button>
+        </form>
+        <div id="servicesList" class="list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Time Slots</p>
+            <h2>Publish</h2>
+          </div>
+          <button id="reloadSlots" class="ghost">Reload</button>
+        </div>
+        <form id="slotForm" class="form">
+          <div class="field-row"><label>Service</label><select name="serviceId" id="slotServiceSelect" required></select></div>
+          <div class="field-row"><label>Date</label><input name="date" type="date" required /></div>
+          <div class="field-row"><label>Start</label><input name="startTime" type="time" required /></div>
+          <div class="field-row"><label>End</label><input name="endTime" type="time" required /></div>
+          <button type="submit">Create Time Slot</button>
+        </form>
+        <div id="slotsList" class="list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Appointments</p>
+            <h2>Book & Manage</h2>
+          </div>
+          <button id="reloadAppointments" class="ghost">Reload</button>
+        </div>
+        <form id="appointmentForm" class="form">
+          <div class="field-row"><label>Service</label><select name="serviceId" id="appointmentServiceSelect" required></select></div>
+          <div class="field-row"><label>Time Slot</label><select name="timeSlotId" id="appointmentSlotSelect" required></select></div>
+          <div class="field-row"><label>Customer Name</label><input name="customerName" required /></div>
+          <div class="field-row"><label>Customer Email</label><input name="customerEmail" type="email" required /></div>
+          <button type="submit">Book Appointment</button>
+        </form>
+        <div id="appointmentsList" class="list"></div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

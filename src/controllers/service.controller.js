@@ -1,6 +1,6 @@
 import Service from '../models/service.model.js';
 import ApiError from '../utils/ApiError.js';
-import { catchAsync } from '../utils/catchAsync.js';
+import catchAsync from '../utils/catchAsync.js';
 
 
 const createService = catchAsync(async (req, res) => {

@@ -1,0 +1,109 @@
+--#########################################
+-- run the test application -- run below in terminal
+--#########################################
+npm run client
+
+
+--#########################################
+-- 1. run the application
+--#########################################
+npm run dev
+
+--#########################################
+-- 2. set base URL, run this in POWERSHELL
+--#########################################
+# If your server runs on 3002, set "http://localhost:3002/api" instead
+$BASE = "http://localhost:3000/api"
+
+
+--#########################################
+-- 3. check the health RUN in POWERSHELL
+--#########################################
+curl.exe http://localhost:3000/health
+
+--#########################################
+-- 4. check the services
+--#########################################
+curl.exe http://localhost:3000/api/services
+
+------------------- services:
+
+{"message":"Services retrieved successfully","data":[{
+
+"_id":"694b16f2b92e3dc8b99a1fa5","name":"Consultation","description":"30m","durationMinutes":30,"price":50,"createdAt":"2025-12-23T22:25:54.355Z","updatedAt":"2025-12-23T22:25:54.355Z","__v":0},
+
+
+{"_id":"694b1732b92e3dc8b99a1fa8","name":"Barber","description":"60m","durationMinutes":25,"price":50,"createdAt":"2025-12-23T22:26:58.820Z","updatedAt":"2025-12-23T22:26:58.820Z","__v":0}
+
+]}
+
+------------------------------------------
+
+
+--#########################################
+-- 5. create service
+--#########################################
+
+$body = @{
+  name = "Nails"
+  description = "60m"
+  durationMinutes = 25
+  price = 50
+} | ConvertTo-Json
+
+Invoke-RestMethod -Method Post -Uri "http://localhost:3000/api/services" -ContentType "application/json" -Body $body
+
+
+
+--#########################################
+-- 6. check the timelosts
+--#########################################
+curl.exe http://localhost:3000/api/timeslots
+
+--------------------------timeslot:
+{"message":"Time slots retrieved successfully","data":[{
+
+"_id":"694b1ddb7efe532da8a35da1",
+"serviceId":{"_id":"694b16f2b92e3dc8b99a1fa5","name":"Consultation","durationMinutes":30,"price":50},
+
+"date":"2025-12-24","startTime":"10:00","endTime":"10:30","isBooked":false,"createdAt":"2025-12-23T22:55:23.968Z","updatedAt":"2025-12-23T22:55:23.968Z","__v":0}]}
+-----------------------------------------------
+
+--#########################################
+-- 7. create timelslot for Consultation service with service id: 694b16f2b92e3dc8b99a1fa5
+--#########################################
+$slot = @{
+  serviceId = "694b16f2b92e3dc8b99a1fa5"
+  date      = "2025-12-24"   # YYYY-MM-DD
+  startTime = "10:00"        # HH:mm
+  endTime   = "10:30"        # HH:mm
+} | ConvertTo-Json
+
+$slotResp = Invoke-RestMethod -Method Post -Uri "$BASE/timeslots" -ContentType "application/json" -Body $slot
+
+
+--#########################################
+-- 7. check the appointments
+--#########################################
+curl.exe http://localhost:3000/api/appointments
+
+--#########################################
+-- 8. create the appointments for Consultation service on given timeslot
+--#########################################
+
+$appt = @{
+  serviceId    = "694b16f2b92e3dc8b99a1fa5"
+  timeSlotId   = "694b1ddb7efe532da8a35da1"
+  customerName = "Ada Lovelace"
+  customerEmail= "ada@example.com"
+} | ConvertTo-Json
+
+$apptResp = Invoke-RestMethod -Method Post -Uri "$BASE/appointments" -ContentType "application/json" -Body $appt
+
+
+
+
+
+
+
+
